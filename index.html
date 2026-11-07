@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f7f5" />
+  <title>Ngày Mai — Đếm ngày cho điều bạn mong chờ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Ngày Mai, trang chủ"><span class="brand-mark">n.</span><span>ngày mai<span class="brand-dot">.</span></span></a>
+      <nav class="top-nav"><a class="active" href="#plans">Kế hoạch</a><a href="#about">Về ứng dụng</a></nav>
+      <button class="avatar" aria-label="Tài khoản">A</button>
+    </header>
+
+    <main>
+      <section class="hero" id="about">
+        <div class="hero-copy">
+          <span class="eyebrow"><span class="sparkle">✳</span> MỘT ĐIỀU ĐÁNG MONG CHỜ</span>
+          <h1>Mỗi ngày trôi qua,<br><em>gần hơn một chút.</em></h1>
+          <p>Gom những ngày đặc biệt vào một nơi. Từ chuyến đi sắp tới đến cột mốc bạn luôn chờ đợi.</p>
+          <button class="primary-button" id="newPlan"><span>＋</span> Tạo kế hoạch đầu tiên</button>
+          <div class="hero-note"><span class="note-line"></span> Những ngày đẹp nhất đang ở phía trước</div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="sun"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="hero-card"><div class="hero-card-top"><span>THÁNG 03 · 2027</span><span>✳</span></div><div class="hero-big">D<span>—</span>91</div><div class="hero-title">Một khởi đầu mới</div><div class="hero-card-bottom"><span>Thời gian đang đến gần</span><span>♡</span></div></div>
+          <span class="art-label label-left">01 / những điều sắp tới</span><span class="art-label label-right">HÔM NAY LÀ MỘT MÓN QUÀ</span>
+          <div class="floating-dot dot-a"></div><div class="floating-dot dot-b"></div><div class="floating-dot dot-c"></div>
+        </div>
+      </section>
+
+      <section class="plans-section" id="plans">
+        <div class="section-heading"><div><span class="eyebrow">LỊCH CỦA BẠN</span><h2>Đang đếm đến <span id="planCount">0</span> điều</h2></div><button class="text-button" id="newPlanSecondary">＋ Thêm kế hoạch</button></div>
+        <div class="filter-row"><div class="filters" role="group" aria-label="Lọc kế hoạch"><button class="filter active" data-filter="all">Tất cả <span id="countAll">0</span></button><button class="filter" data-filter="upcoming">Sắp tới</button><button class="filter" data-filter="past">Đã qua</button></div><span class="today-label"><span></span> <b id="todayText"></b></span></div>
+        <div class="plan-grid" id="planGrid"></div>
+        <div class="empty-state" id="emptyState"><div class="empty-icon">✳</div><h3>Chưa có ngày nào được đánh dấu</h3><p>Tạo kế hoạch đầu tiên và bắt đầu đếm ngược đến điều bạn mong chờ.</p><button class="primary-button" id="emptyCreate">＋ Tạo một kế hoạch</button></div>
+      </section>
+    </main>
+    <footer><a class="brand footer-brand" href="#"><span class="brand-mark">n.</span><span>ngày mai<span class="brand-dot">.</span></span></a><span>Thời gian trôi qua, khoảnh khắc ở lại.</span><span>Được làm bằng <span class="heart">♥</span> cho những ngày đáng nhớ</span></footer>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header"><div><span class="eyebrow">THÊM MỘT DẤU MỐC</span><h2 id="modalTitle">Tạo kế hoạch</h2></div><button class="close-button" id="closeModal" aria-label="Đóng">×</button></div>
+      <form id="planForm">
+        <label class="field-label" for="planName">Tên kế hoạch</label><input id="planName" class="text-input" maxlength="70" placeholder="Ví dụ: Chuyến đi Đà Lạt" required />
+        <label class="field-label">Kiểu đếm</label><div class="type-grid" id="typeGrid">
+          <button type="button" class="type-option selected" data-type="countdown"><span class="type-icon">↓</span><span><b>Đếm ngược</b><small>Số ngày còn lại</small></span></button>
+          <button type="button" class="type-option" data-type="elapsed"><span class="type-icon">↑</span><span><b>Đếm ngày</b><small>Số ngày đã qua</small></span></button>
+          <button type="button" class="type-option" data-type="monthly"><span class="type-icon">↻</span><span><b>Hàng tháng</b><small>Lặp lại mỗi tháng</small></span></button>
+          <button type="button" class="type-option" data-type="yearly"><span class="type-icon">✳</span><span><b>Hàng năm</b><small>Lặp lại mỗi năm</small></span></button>
+          <button type="button" class="type-option" data-type="monthday"><span class="type-icon">◷</span><span><b>Tháng và ngày</b><small>Còn bao lâu đến ngày</small></span></button>
+          <button type="button" class="type-option" data-type="ymd"><span class="type-icon">▦</span><span><b>Năm/tháng/ngày</b><small>Hiện đủ năm, tháng, ngày</small></span></button>
+        </div><input type="hidden" id="planType" value="countdown" />
+        <div class="date-row"><div class="date-field"><label class="field-label" for="planDate">Ngày bắt đầu / sự kiện</label><input id="planDate" class="text-input" type="date" required /></div><div class="date-field" id="timeField"><label class="field-label" for="planTime">Giờ (không bắt buộc)</label><input id="planTime" class="text-input" type="time" /></div></div>
+        <label class="field-label" for="planImage">Ảnh bìa <span class="optional">· không bắt buộc</span></label><label class="upload-box" for="planImage"><span class="upload-icon">↥</span><span id="uploadLabel"><b>Chọn một tấm ảnh</b><small>JPG, PNG hoặc WEBP · tối đa 8 MB</small></span><img id="imagePreview" alt="Ảnh xem trước" /></label><input id="planImage" type="file" accept="image/*" class="visually-hidden" />
+        <div class="form-actions"><button class="cancel-button" type="button" id="cancelModal">Hủy</button><button class="primary-button" type="submit" id="savePlan">Lưu kế hoạch <span>↗</span></button></div>
+      </form>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
