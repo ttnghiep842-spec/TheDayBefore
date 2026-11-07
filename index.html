@@ -25,13 +25,12 @@
           <h1>Mỗi ngày trôi qua,<br><em>gần hơn một chút.</em></h1>
           <p>Gom những ngày đặc biệt vào một nơi. Từ chuyến đi sắp tới đến cột mốc bạn luôn chờ đợi.</p>
           <button class="primary-button" id="newPlan"><span>＋</span> Tạo kế hoạch đầu tiên</button>
-          <div class="hero-note"><span class="note-line"></span> Những ngày đẹp nhất đang ở phía trước</div>
         </div>
-        <div class="hero-art" aria-hidden="true">
-          <div class="sun"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-          <div class="hero-card"><div class="hero-card-top"><span>THÁNG 03 · 2027</span><span>✳</span></div><div class="hero-big">D<span>—</span>91</div><div class="hero-title">Một khởi đầu mới</div><div class="hero-card-bottom"><span>Thời gian đang đến gần</span><span>♡</span></div></div>
-          <span class="art-label label-left">01 / những điều sắp tới</span><span class="art-label label-right">HÔM NAY LÀ MỘT MÓN QUÀ</span>
-          <div class="floating-dot dot-a"></div><div class="floating-dot dot-b"></div><div class="floating-dot dot-c"></div>
+        <div class="hero-art">
+          <button class="slide-arrow slide-prev" id="slidePrev" aria-label="Kế hoạch trước">‹</button>
+          <div class="hero-card" id="heroSlide"><div class="hero-card-top"><span id="slideDate"></span><span>✳</span></div><div class="hero-big" id="slideCount"></div><div class="hero-title" id="slideTitle"></div><div class="hero-card-bottom"><span id="slideType"></span><span>♡</span></div></div>
+          <button class="slide-arrow slide-next" id="slideNext" aria-label="Kế hoạch tiếp theo">›</button>
+          <div class="slide-dots" id="slideDots" aria-label="Chọn kế hoạch"></div>
         </div>
       </section>
 

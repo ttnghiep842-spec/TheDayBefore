@@ -6,7 +6,7 @@ const samples = [
   { id: 'sample-3', name: 'Ngày của riêng mình', type: 'countdown', date: '2027-03-28', image: '', time: '' },
   { id: 'sample-4', name: 'Kỷ niệm ngày cưới', type: 'yearly', date: '2026-05-20', image: '', time: '' }
 ];
-let plans = loadPlans(), currentFilter = 'all', editingId = null, chosenImage = '', toastTimer;
+let plans = loadPlans(), currentFilter = 'all', editingId = null, chosenImage = '', toastTimer, slideIndex = 0, slideTimer;
 const $ = id => document.getElementById(id);
 
 function loadPlans() {
@@ -77,7 +77,27 @@ function render() {
     grid.append(card);
   });
   $('emptyState').classList.toggle('visible', visible.length === 0); grid.style.display = visible.length ? 'grid' : 'none';
+  renderSlideshow();
 }
+function renderSlideshow() {
+  const card = $('heroSlide');
+  if (!plans.length) {
+    card.style.setProperty('--slide-image', 'linear-gradient(145deg,#87947b,#3f5d50)');
+    $('slideDate').textContent = 'KẾ HOẠCH CỦA BẠN'; $('slideCount').textContent = '✳'; $('slideTitle').textContent = 'Điều gì đang chờ bạn?'; $('slideType').textContent = 'Tạo một kế hoạch mới';
+    $('slideDots').innerHTML = ''; return;
+  }
+  slideIndex = (slideIndex + plans.length) % plans.length;
+  const plan = plans[slideIndex], counter = counterFor(plan);
+  const photo = plan.image ? `url("${plan.image}")` : 'linear-gradient(145deg,#87947b,#3f5d50)';
+  card.style.setProperty('--slide-image', photo);
+  $('slideDate').textContent = dateParts(counter.date).toUpperCase();
+  $('slideCount').textContent = counter.label;
+  $('slideTitle').textContent = plan.name;
+  $('slideType').textContent = typeNames[plan.type] || typeNames.countdown;
+  $('slideDots').innerHTML = plans.map((_, index) => `<button class="slide-dot${index === slideIndex ? ' active' : ''}" aria-label="Kế hoạch ${index + 1}" data-slide="${index}"></button>`).join('');
+  $('slideDots').querySelectorAll('.slide-dot').forEach(dot => dot.addEventListener('click', () => { slideIndex = Number(dot.dataset.slide); renderSlideshow(); restartSlideTimer(); }));
+}
+function restartSlideTimer() { clearInterval(slideTimer); if (plans.length > 1) slideTimer = setInterval(() => { slideIndex = (slideIndex + 1) % plans.length; renderSlideshow(); }, 5000); }
 function showToast(message) { const el = $('toast'); el.textContent = message; el.classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('visible'), 2600); }
 function openModal(plan = null) {
   editingId = plan?.id || null; chosenImage = plan?.image || ''; $('planForm').reset();
@@ -99,6 +119,8 @@ document.addEventListener('click', event => { if (!event.target.closest('.card-m
 document.addEventListener('keydown', event => { if (event.key === 'Escape') closeModal(); });
 document.querySelectorAll('.type-option').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.type-option').forEach(item => item.classList.remove('selected')); button.classList.add('selected'); $('planType').value = button.dataset.type; }));
 document.querySelectorAll('.filter').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.filter').forEach(item => item.classList.remove('active')); button.classList.add('active'); currentFilter = button.dataset.filter; render(); }));
+$('slidePrev').addEventListener('click', () => { slideIndex = (slideIndex - 1 + plans.length) % plans.length; renderSlideshow(); restartSlideTimer(); });
+$('slideNext').addEventListener('click', () => { slideIndex = (slideIndex + 1) % plans.length; renderSlideshow(); restartSlideTimer(); });
 
 async function compressImage(file) {
   const image = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => { const img = new Image(); img.onload = () => resolve(img); img.onerror = reject; img.src = reader.result; }; reader.onerror = reject; reader.readAsDataURL(file); });
@@ -123,4 +145,4 @@ $('planForm').addEventListener('submit', event => {
   currentFilter = 'all'; document.querySelectorAll('.filter').forEach(button => button.classList.toggle('active', button.dataset.filter === 'all'));
   render(); closeModal(); showToast(previousId ? 'Đã cập nhật kế hoạch.' : 'Đã lưu kế hoạch của bạn.');
 });
-render(); setInterval(render, 60000);
+render(); restartSlideTimer(); setInterval(render, 60000);
