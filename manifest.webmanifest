@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "Ngày Mai — Đếm ngày",
+  "short_name": "Ngày Mai",
+  "description": "Đếm ngày đến những kế hoạch và khoảnh khắc đáng nhớ.",
+  "lang": "vi-VN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f8f5",
+  "theme_color": "#506c59",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
