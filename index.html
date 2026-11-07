@@ -59,6 +59,11 @@
         </div><input type="hidden" id="planType" value="countdown" />
         <div class="date-row"><div class="date-field"><label class="field-label" for="planDate">Ngày bắt đầu / sự kiện</label><input id="planDate" class="text-input" type="date" required /></div><div class="date-field" id="timeField"><label class="field-label" for="planTime">Giờ (không bắt buộc)</label><input id="planTime" class="text-input" type="time" /></div></div>
         <label class="field-label" for="planImage">Ảnh bìa <span class="optional">· không bắt buộc</span></label><label class="upload-box" for="planImage"><span class="upload-icon">↥</span><span id="uploadLabel"><b>Chọn một tấm ảnh</b><small>JPG, PNG hoặc WEBP · tối đa 8 MB</small></span><img id="imagePreview" alt="Ảnh xem trước" /></label><input id="planImage" type="file" accept="image/*" class="visually-hidden" />
+        <div class="crop-editor" id="cropEditor" hidden>
+          <div class="crop-heading"><b>Căn chỉnh ảnh bìa</b><span>Kéo ảnh để chọn phần muốn hiển thị</span></div>
+          <div class="crop-frame" id="cropFrame"><img id="cropImage" alt="Kéo ảnh để căn chỉnh khung cắt" draggable="false" /></div>
+          <label class="zoom-control" for="cropZoom"><span>Thu nhỏ</span><input id="cropZoom" type="range" min="100" max="220" value="100" /><span>Phóng to</span></label>
+        </div>
         <div class="form-actions"><button class="cancel-button" type="button" id="cancelModal">Hủy</button><button class="primary-button" type="submit" id="savePlan">Lưu kế hoạch <span>↗</span></button></div>
       </form>
     </section>

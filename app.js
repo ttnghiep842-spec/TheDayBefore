@@ -6,7 +6,7 @@ const samples = [
   { id: 'sample-3', name: 'Ngày của riêng mình', type: 'countdown', date: '2027-03-28', image: '', time: '' },
   { id: 'sample-4', name: 'Kỷ niệm ngày cưới', type: 'yearly', date: '2026-05-20', image: '', time: '' }
 ];
-let plans = loadPlans(), currentFilter = 'all', editingId = null, chosenImage = '', toastTimer, slideIndex = 0, slideTimer;
+let plans = loadPlans(), currentFilter = 'all', editingId = null, chosenImage = '', crop = { x: 50, y: 50, zoom: 1 }, toastTimer, slideIndex = 0, slideTimer;
 const $ = id => document.getElementById(id);
 
 function loadPlans() {
@@ -58,7 +58,8 @@ function render() {
     const counter = counterFor(plan), card = document.createElement('article');
     card.className = 'plan-card';
     card.style.setProperty('--cover', plan.image ? `url("${plan.image}")` : 'linear-gradient(145deg,#9caa84,#3f5d50)');
-    card.innerHTML = `<span class="card-index">${String(index + 1).padStart(2, '0')} / ĐIỀU ĐANG CHỜ</span>
+    const position = plan.crop || { x: 50, y: 50, zoom: 1 };
+    card.innerHTML = `${plan.image ? `<img class="plan-photo" src="${plan.image}" alt="" draggable="false" style="object-position:${position.x}% ${position.y}%;transform:scale(${position.zoom || 1})">` : ''}<span class="card-index">${String(index + 1).padStart(2, '0')} / ĐIỀU ĐANG CHỜ</span>
       <button class="card-menu" aria-label="Tùy chọn kế hoạch" aria-expanded="false">···</button>
       <div class="card-actions" hidden><button data-action="edit">Chỉnh sửa</button><button data-action="delete">Xóa kế hoạch</button></div>
       <div class="card-content"><div class="card-count">${escapeHtml(counter.label)}</div><div class="card-title">${escapeHtml(plan.name)}</div>
@@ -90,6 +91,8 @@ function renderSlideshow() {
   const plan = plans[slideIndex], counter = counterFor(plan);
   const photo = plan.image ? `url("${plan.image}")` : 'linear-gradient(145deg,#87947b,#3f5d50)';
   card.style.setProperty('--slide-image', photo);
+  const position = plan.crop || { x: 50, y: 50, zoom: 1 };
+  card.style.setProperty('--slide-position', `${position.x}% ${position.y}%`);
   $('slideDate').textContent = dateParts(counter.date).toUpperCase();
   $('slideCount').textContent = counter.label;
   $('slideTitle').textContent = plan.name;
@@ -100,7 +103,7 @@ function renderSlideshow() {
 function restartSlideTimer() { clearInterval(slideTimer); if (plans.length > 1) slideTimer = setInterval(() => { slideIndex = (slideIndex + 1) % plans.length; renderSlideshow(); }, 5000); }
 function showToast(message) { const el = $('toast'); el.textContent = message; el.classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('visible'), 2600); }
 function openModal(plan = null) {
-  editingId = plan?.id || null; chosenImage = plan?.image || ''; $('planForm').reset();
+  editingId = plan?.id || null; chosenImage = plan?.image || ''; crop = { x: 50, y: 50, zoom: 1, ...(plan?.crop || {}) }; $('planForm').reset();
   $('modalTitle').textContent = plan ? 'Chỉnh sửa kế hoạch' : 'Tạo kế hoạch';
   $('savePlan').innerHTML = plan ? 'Cập nhật kế hoạch <span>↗</span>' : 'Lưu kế hoạch <span>↗</span>';
   const today = new Date();
@@ -109,6 +112,7 @@ function openModal(plan = null) {
   document.querySelectorAll('.type-option').forEach(button => button.classList.toggle('selected', button.dataset.type === $('planType').value));
   $('imagePreview').src = chosenImage; $('imagePreview').style.display = chosenImage ? 'block' : 'none';
   $('uploadLabel').innerHTML = chosenImage ? '<b>Ảnh bìa đã chọn</b><small>Nhấn để thay ảnh</small>' : '<b>Chọn một tấm ảnh</b><small>JPG, PNG hoặc WEBP · tối đa 8 MB</small>';
+  updateCropEditor();
   $('modalBackdrop').classList.add('open'); $('modalBackdrop').setAttribute('aria-hidden', 'false'); setTimeout(() => $('planName').focus(), 50);
 }
 function closeModal() { $('modalBackdrop').classList.remove('open'); $('modalBackdrop').setAttribute('aria-hidden', 'true'); editingId = null; }
@@ -129,17 +133,43 @@ async function compressImage(file) {
   canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
   return canvas.toDataURL('image/jpeg', 0.82);
 }
+function updateCropEditor() {
+  const visible = Boolean(chosenImage);
+  $('cropEditor').hidden = !visible;
+  if (!visible) return;
+  if ($('cropImage').getAttribute('src') !== chosenImage) $('cropImage').src = chosenImage;
+  $('cropImage').style.objectPosition = `${crop.x}% ${crop.y}%`;
+  $('cropImage').style.transform = `scale(${crop.zoom})`;
+  $('cropZoom').value = String(Math.round(crop.zoom * 100));
+}
 $('planImage').addEventListener('change', async event => {
   const file = event.target.files[0]; if (!file) return;
   if (file.size > 8 * 1024 * 1024) { showToast('Ảnh vượt quá 8 MB. Vui lòng chọn ảnh khác.'); event.target.value = ''; return; }
   try {
-    chosenImage = await compressImage(file); $('imagePreview').src = chosenImage; $('imagePreview').style.display = 'block';
+    chosenImage = await compressImage(file); crop = { x: 50, y: 50, zoom: 1 }; $('imagePreview').src = chosenImage; $('imagePreview').style.display = 'block'; updateCropEditor();
     $('uploadLabel').innerHTML = `<b>${escapeHtml(file.name)}</b><small>Đã tối ưu ảnh · nhấn để thay</small>`;
   } catch { showToast('Không đọc được ảnh này. Hãy thử định dạng JPG hoặc PNG.'); }
 });
+let cropDrag = null;
+$('cropFrame').addEventListener('pointerdown', event => {
+  if (!chosenImage) return;
+  const rect = $('cropFrame').getBoundingClientRect(), img = $('cropImage');
+  const fitScale = Math.max(rect.width / img.naturalWidth, rect.height / img.naturalHeight) * crop.zoom;
+  cropDrag = { pointerId: event.pointerId, x: event.clientX, y: event.clientY,
+    overflowX: Math.max(0, img.naturalWidth * fitScale - rect.width), overflowY: Math.max(0, img.naturalHeight * fitScale - rect.height) };
+  $('cropFrame').setPointerCapture(event.pointerId); event.preventDefault();
+});
+$('cropFrame').addEventListener('pointermove', event => {
+  if (!cropDrag || event.pointerId !== cropDrag.pointerId) return;
+  if (cropDrag.overflowX) crop.x = Math.max(0, Math.min(100, crop.x - (event.clientX - cropDrag.x) / cropDrag.overflowX * 100));
+  if (cropDrag.overflowY) crop.y = Math.max(0, Math.min(100, crop.y - (event.clientY - cropDrag.y) / cropDrag.overflowY * 100));
+  cropDrag.x = event.clientX; cropDrag.y = event.clientY; updateCropEditor();
+});
+['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => $('cropFrame').addEventListener(type, () => { cropDrag = null; }));
+$('cropZoom').addEventListener('input', event => { crop.zoom = Number(event.target.value) / 100; updateCropEditor(); });
 $('planForm').addEventListener('submit', event => {
   event.preventDefault(); const name = $('planName').value.trim(); if (!name) return;
-  const previousPlans = plans.map(plan => ({ ...plan })), previousId = editingId, item = { id: editingId || `plan-${Date.now()}`, name, type: $('planType').value, date: $('planDate').value, time: $('planTime').value, image: chosenImage };
+  const previousPlans = plans.map(plan => ({ ...plan })), previousId = editingId, item = { id: editingId || `plan-${Date.now()}`, name, type: $('planType').value, date: $('planDate').value, time: $('planTime').value, image: chosenImage, crop: { ...crop } };
   if (editingId) plans = plans.map(plan => plan.id === editingId ? item : plan); else plans.unshift(item);
   if (!persist()) { plans = previousPlans; return; }
   currentFilter = 'all'; document.querySelectorAll('.filter').forEach(button => button.classList.toggle('active', button.dataset.filter === 'all'));
