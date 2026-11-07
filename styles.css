@@ -16,3 +16,11 @@
 .slide-dot.active{width:18px;background:#fff}
 @media(max-width:800px){.hero-art{height:310px}.hero-art .hero-card{height:250px;width:78%}}
 @media(max-width:560px){.hero-art{height:250px;margin-top:5px}.hero-art .hero-card{height:205px;width:82%;padding:15px 17px}.hero-art .hero-big{margin-top:27px;font-size:34px}.hero-art .hero-title{font-size:14px}.hero-art .hero-card-bottom{font-size:8px}.slide-arrow{width:28px;height:28px;font-size:22px}.slide-dots{bottom:5px}}
+/* Keep mobile taps from triggering browser zoom; preserve native responsive layout. */
+html{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,a,.text-input{touch-action:manipulation}
+@media(max-width:560px){
+  .text-input{font-size:16px;min-height:46px}
+  .app-shell{padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
+  footer{padding-bottom:max(18px,env(safe-area-inset-bottom))}
+}
