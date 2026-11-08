@@ -49,7 +49,7 @@
 
   <section class="detail-screen" id="planDetail" aria-hidden="true">
     <div class="detail-cover" id="detailCover">
-      <img id="detailPhoto" alt="" />
+      <div class="detail-image-frame"><img id="detailPhoto" alt="" /></div>
       <button class="detail-close" id="detailClose" aria-label="Đóng">×</button>
       <button class="detail-more" id="detailMore" aria-label="Tùy chọn kế hoạch">⋮</button>
       <div class="detail-menu" id="detailMenu" hidden><button id="detailEdit">Chỉnh sửa</button><button id="detailDelete">Xóa kế hoạch</button></div>
@@ -63,21 +63,29 @@
 
   <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
     <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modal-header"><div><span class="eyebrow">DAILY DAY</span><h2 id="modalTitle">Tạo kế hoạch</h2></div><button class="close-button" id="closeModal" aria-label="Đóng">×</button></div>
+      <div class="modal-header"><div class="modal-heading"><button class="wizard-back" id="wizardBack" type="button" aria-label="Quay lại">‹</button><h2 id="modalTitle">Sự kiện thuộc loại nào?</h2></div><button class="close-button" id="closeModal" aria-label="Đóng">×</button></div>
       <form id="planForm">
-        <label class="field-label" for="planName">Tên kế hoạch</label><input id="planName" class="text-input" maxlength="70" placeholder="Ví dụ: Chuyến đi Đà Lạt" required />
-        <label class="field-label">Kiểu đếm</label><div class="type-grid" id="typeGrid">
-          <button type="button" class="type-option selected" data-type="countdown"><span class="type-icon">↓</span><span><b>Đếm ngược</b><small>Số ngày còn lại</small></span></button>
-          <button type="button" class="type-option" data-type="elapsed"><span class="type-icon">↑</span><span><b>Đếm ngày</b><small>Số ngày đã qua</small></span></button>
-          <button type="button" class="type-option" data-type="monthly"><span class="type-icon">↻</span><span><b>Hàng tháng</b><small>Lặp lại mỗi tháng</small></span></button>
-          <button type="button" class="type-option" data-type="yearly"><span class="type-icon">✳</span><span><b>Hàng năm</b><small>Lặp lại mỗi năm</small></span></button>
-          <button type="button" class="type-option" data-type="monthday"><span class="type-icon">◷</span><span><b>Tháng và ngày</b><small>Còn bao lâu đến ngày</small></span></button>
-          <button type="button" class="type-option" data-type="ymd"><span class="type-icon">▦</span><span><b>Năm/tháng/ngày</b><small>Hiện đủ năm, tháng, ngày</small></span></button>
-        </div><input type="hidden" id="planType" value="countdown" />
-        <div class="date-row"><div class="date-field"><label class="field-label" for="planDate">Ngày bắt đầu / sự kiện</label><input id="planDate" class="text-input" type="date" required /></div><div class="date-field"><label class="field-label" for="planTime">Giờ (không bắt buộc)</label><input id="planTime" class="text-input" type="time" /></div></div>
-        <label class="field-label" for="planImage">Ảnh bìa <span class="optional">· không bắt buộc</span></label><label class="upload-box" for="planImage"><span class="upload-icon">↥</span><span id="uploadLabel"><b>Chọn một tấm ảnh</b><small>JPG, PNG hoặc WEBP · tối đa 8 MB</small></span><img id="imagePreview" alt="Ảnh xem trước" /></label><input id="planImage" type="file" accept="image/*" class="visually-hidden" />
-        <div class="crop-editor" id="cropEditor" hidden><div class="crop-heading"><b>Căn chỉnh ảnh bìa</b><span>Kéo ảnh để chọn vùng hiển thị</span></div><div class="crop-frame" id="cropFrame"><img id="cropImage" alt="Kéo ảnh để căn chỉnh khung cắt" draggable="false" /></div><label class="zoom-control" for="cropZoom"><span>Thu nhỏ</span><input id="cropZoom" type="range" min="100" max="220" value="100" /><span>Phóng to</span></label></div>
-        <div class="form-actions"><button class="cancel-button" type="button" id="cancelModal">Hủy</button><button class="primary-button" type="submit" id="savePlan">Lưu kế hoạch</button></div>
+        <section class="wizard-step active" id="typeStep" aria-label="Chọn kiểu đếm">
+          <div class="type-grid" id="typeGrid">
+            <button type="button" class="type-option selected" data-type="countdown"><span class="type-copy"><b>Đếm ngược</b><small>Số ngày còn lại đến sự kiện</small></span><span class="type-check">✓</span></button>
+            <button type="button" class="type-option" data-type="elapsed"><span class="type-copy"><b>Đếm ngày</b><small>Số ngày đã qua từ sự kiện</small></span><span class="type-check">✓</span></button>
+            <button type="button" class="type-option" data-type="monthly"><span class="type-copy"><b>Hàng tháng</b><small>Lặp lại mỗi tháng (vd: ngày lĩnh lương)</small></span><span class="type-check">✓</span></button>
+            <button type="button" class="type-option" data-type="yearly"><span class="type-copy"><b>Hàng năm</b><small>Lặp lại mỗi năm (vd: sinh nhật, kỷ niệm ngày cưới)</small></span><span class="type-check">✓</span></button>
+            <button type="button" class="type-option" data-type="monthday"><span class="type-copy"><b>Tháng và ngày</b><small>Hiện tháng và ngày đến sự kiện</small></span><span class="type-check">✓</span></button>
+            <button type="button" class="type-option" data-type="ymd"><span class="type-copy"><b>Năm/tháng/ngày</b><small>Xem ngày theo dạng năm/tháng/ngày</small></span><span class="type-check">✓</span></button>
+          </div>
+          <input type="hidden" id="planType" value="countdown" />
+          <div class="step-actions"><button class="primary-button" id="stepContinue" type="button">OK</button></div>
+        </section>
+        <section class="wizard-step details-step" id="detailsStep" aria-label="Nhập thông tin kế hoạch" hidden>
+          <div class="detail-input-row"><input id="planName" class="text-input" maxlength="70" placeholder="Vui lòng nhập tiêu đề" aria-label="Tiêu đề kế hoạch" required /><span class="title-mark" aria-hidden="true">□</span></div>
+          <div class="detail-input-row"><label for="planDate">Ngày sự kiện</label><input id="planDate" class="text-input" type="date" required /></div>
+          <div class="detail-input-row"><label for="planTime">Giờ (không bắt buộc)</label><input id="planTime" class="text-input" type="time" /></div>
+          <button class="detail-input-row type-summary" id="typeSummary" type="button"><span>Cách tính</span><strong id="selectedTypeName">Đếm ngược</strong></button>
+          <div class="detail-input-row image-row"><span>Ảnh bìa</span><label class="upload-box" for="planImage"><span id="uploadLabel"><b>Chọn ảnh</b></span><img id="imagePreview" alt="Ảnh xem trước" /></label><input id="planImage" type="file" accept="image/*" class="visually-hidden" /></div>
+          <div class="crop-editor" id="cropEditor" hidden><div class="crop-heading"><b>Căn chỉnh ảnh bìa</b><span>Kéo ảnh để chọn vùng hiển thị</span></div><div class="crop-frame" id="cropFrame"><img id="cropImage" alt="Kéo ảnh để căn chỉnh khung cắt" draggable="false" /></div><label class="zoom-control" for="cropZoom"><span>Thu nhỏ</span><input id="cropZoom" type="range" min="100" max="220" value="100" /><span>Phóng to</span></label></div>
+          <div class="form-actions"><button class="cancel-button" type="button" id="cancelModal">Hủy</button><button class="primary-button" type="submit" id="savePlan">TẠO</button></div>
+        </section>
       </form>
     </section>
   </div>

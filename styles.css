@@ -87,3 +87,77 @@ body[data-theme=light] .toast{border-color:#deded8;background:#fff;color:#242722
 @media(max-width:700px){.detail-cover{height:35vh;min-height:230px}.detail-panel{inset:30vh 0 0}.detail-cover h1{left:28px;right:28px;bottom:-13px;font-size:27px}}
 .detail-cover h1{bottom:8px}
 @media(max-width:700px){.detail-cover h1{bottom:8px}}
+/* Two-step plan creation flow. */
+.modal-heading{display:flex;align-items:center;gap:10px}
+.modal-heading h2{margin:0;font-size:clamp(23px,4vw,30px);font-weight:400}
+.wizard-back{display:none;width:34px;height:34px;border:0;border-radius:50%;background:#29292f;color:#f4f4f5;font:300 27px/1 var(--sans);cursor:pointer}
+.wizard-back:not([hidden]){display:grid;place-items:center}
+.wizard-step[hidden]{display:none}
+.wizard-step.active{display:block}
+.wizard-step .type-grid{display:flex;flex-direction:column;gap:0;margin-top:19px}
+.wizard-step .type-option{width:100%;min-height:64px;justify-content:space-between;padding:12px 4px;border:0;border-bottom:1px solid #303036;border-radius:0;background:transparent;color:#f3f3f5}
+.wizard-step .type-option.selected{background:transparent}
+.type-copy{display:block;min-width:0;padding-right:14px}
+.wizard-step .type-copy b{font-size:16px;font-weight:600}
+.wizard-step .type-copy small{margin-top:4px;color:#9a9aa2;font-size:14px;line-height:1.35}
+.type-check{visibility:hidden;color:#2ca8f4;font-size:27px;font-weight:600;line-height:1}
+.wizard-step .type-option.selected .type-check{visibility:visible}
+.step-actions{margin-top:27px}
+.step-actions .primary-button{width:100%;min-height:55px;border-radius:12px;background:#168bc9;color:#fff;font-size:17px;font-weight:500}
+.step-actions .primary-button:hover{background:#159ddd}
+.details-step{margin-top:8px}
+.detail-input-row{display:flex;width:100%;min-height:72px;align-items:center;justify-content:space-between;gap:18px;padding:12px 0;border:0;border-bottom:1px solid #303036;background:transparent;color:#f1f1f3;font:400 16px var(--sans);text-align:left}
+.detail-input-row>label,.detail-input-row>span:first-child{flex:0 0 42%;color:#dedee2;font-size:16px}
+.detail-input-row>.text-input{flex:1;min-width:0;height:48px;padding:0;border:0;background:transparent;color:#f4f4f5;text-align:right;font-size:16px}
+.detail-input-row>.text-input:focus{box-shadow:none}
+.detail-input-row>.text-input::placeholder{color:#aaaab1;text-align:left}
+.detail-input-row .title-mark{flex:0 0 auto;color:#eee;font-size:24px}
+.type-summary{cursor:pointer}
+.type-summary strong{color:#f4f4f5;font-size:16px;font-weight:400}
+.image-row .upload-box{flex:0 0 auto;min-width:68px;justify-content:flex-end;min-height:55px;padding:0;border:0;background:transparent}
+.image-row .upload-box b{color:#bbbcc2;font-size:12px;font-weight:400}
+.image-row .upload-box small{display:none}
+.image-row .upload-box img{width:56px;height:56px;border-radius:2px}
+.details-step .crop-editor{margin-top:12px}
+.details-step .form-actions{margin-top:28px}
+.details-step .form-actions .primary-button{min-width:120px;min-height:55px;border-radius:12px;background:#168bc9;color:#fff;font-size:17px;font-weight:500}
+body[data-theme=light] .wizard-back{background:#e7e7e2;color:#292c27}
+body[data-theme=light] .wizard-step .type-option{border-bottom-color:#deded8;background:transparent;color:#292c27}
+body[data-theme=light] .wizard-step .type-option.selected{background:transparent}
+body[data-theme=light] .wizard-step .type-copy small{color:#767971}
+body[data-theme=light] .type-check{color:#168bc9}
+body[data-theme=light] .detail-input-row{border-bottom-color:#deded8;color:#292c27}
+body[data-theme=light] .detail-input-row>label,body[data-theme=light] .detail-input-row>span:first-child{color:#454843}
+body[data-theme=light] .detail-input-row>.text-input,body[data-theme=light] .type-summary strong{color:#242722}
+body[data-theme=light] .detail-input-row>.text-input::placeholder{color:#777b73}
+body[data-theme=light] .image-row .upload-box b{color:#73776f}
+@media(max-width:700px){
+  .modal-backdrop{align-items:stretch;padding:0;background:#101014;backdrop-filter:none}
+  .modal{width:100%;height:100dvh;max-height:none;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 66px) 7vw calc(env(safe-area-inset-bottom) + 30px);border:0;border-radius:0;background:#101014;box-shadow:none}
+  .modal-header{min-height:44px;margin:0 0 24px}
+  .modal-heading h2{font-size:clamp(23px,6vw,30px)}
+  .close-button{flex:0 0 auto;width:44px;height:44px;border-radius:50%;background:#29292f;color:#fff;font-size:28px}
+  .wizard-step .type-grid{margin-top:8px}
+  .wizard-step .type-option{min-height:73px;padding:12px 0}
+  .wizard-step .type-copy b{font-size:18px}
+  .wizard-step .type-copy small{font-size:15px}
+  .step-actions{margin-top:30px}
+  .details-step{margin-top:0}
+  .detail-input-row{min-height:74px}
+  .details-step .form-actions .primary-button{flex:1}
+  body[data-theme=light] .modal-backdrop,body[data-theme=light] .modal{background:#f3f3ef}
+}
+.wizard-step[hidden]{display:none!important}
+/* Keep each circular tile fixed; crop zoom stays clipped inside its frame. */
+.plan-photo-frame{position:absolute;z-index:-1;inset:0;display:block;overflow:hidden;border-radius:inherit}
+.plan-photo{position:absolute;z-index:0;inset:0;width:100%;height:100%;border:0;border-radius:0;object-fit:cover;pointer-events:none;box-shadow:none}
+.plan-grid[data-layout=circle] .plan-photo-frame,.plan-grid[data-layout=circle] .circle-fallback{position:relative;z-index:1;inset:auto;display:block;width:clamp(76px,19vw,112px);height:clamp(76px,19vw,112px);margin:0 auto;border:2px solid #55555c;border-radius:50%;overflow:hidden;background-clip:padding-box;box-shadow:0 0 0 4px var(--bg),0 0 0 5px #44444b}
+.plan-grid[data-layout=circle] .plan-photo{z-index:0;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);border-radius:50%;object-fit:cover;transform-origin:center}
+.plan-grid[data-layout=circle] .circle-fallback{background:linear-gradient(145deg,#536b58,#29352c)}
+body[data-theme=light] .plan-grid[data-layout=circle] .plan-photo{box-shadow:none}
+body[data-theme=light] .plan-grid[data-layout=circle] .plan-photo-frame,body[data-theme=light] .plan-grid[data-layout=circle] .circle-fallback{box-shadow:0 0 0 4px var(--bg),0 0 0 5px #c8c9c2}
+@media(max-width:700px){.plan-grid[data-layout=circle] .plan-photo-frame,.plan-grid[data-layout=circle] .circle-fallback{width:clamp(70px,19vw,92px);height:clamp(70px,19vw,92px)}}
+.detail-image-frame{position:absolute;z-index:0;inset:0;overflow:hidden}
+.detail-image-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:center}
+.detail-cover:after{z-index:1}
+.plan-grid[data-layout=circle] .plan-photo{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);margin:0;border:0;border-radius:50%;box-shadow:none;object-fit:cover}

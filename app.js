@@ -84,7 +84,7 @@ function render() {
     const counter = counterFor(plan), card = document.createElement('article'), pos = plan.crop || { x: 50, y: 50, zoom: 1 };
     card.className = 'plan-card';
     card.setAttribute('role', 'button'); card.tabIndex = 0; card.setAttribute('aria-label', `Mở kế hoạch ${plan.name}`);
-    card.innerHTML = `${plan.image ? `<img class="plan-photo" src="${plan.image}" alt="" draggable="false" style="object-position:${pos.x}% ${pos.y}%;transform:scale(${pos.zoom || 1})">` : '<div class="circle-fallback"></div>'}
+    card.innerHTML = `${plan.image ? `<span class="plan-photo-frame"><img class="plan-photo" src="${plan.image}" alt="" draggable="false" style="object-position:${pos.x}% ${pos.y}%;transform:scale(${pos.zoom || 1})"></span>` : '<span class="plan-photo-frame circle-fallback"></span>'}
       <span class="card-index">${String(index + 1).padStart(2, '0')}</span>
       <div class="card-content"><div class="card-count">${escapeHtml(shortCount(plan, counter))}</div><div class="card-title">${escapeHtml(plan.name)}</div>
       <div class="card-meta"><span>${dateParts(counter.date)}</span><span class="card-kind">${typeNames[plan.type] || typeNames.countdown}</span></div></div>`;
@@ -103,14 +103,23 @@ function openDetails(plan) {
 }
 function closeDetails() { $('planDetail').classList.remove('open'); $('planDetail').setAttribute('aria-hidden', 'true'); $('detailMenu').hidden = true; activePlanId = null; }
 function showToast(message) { const el = $('toast'); el.textContent = message; el.classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('visible'), 2600); }
+function showWizardStep(step) {
+  const choosing = step === 'type';
+  $('typeStep').hidden = !choosing; $('detailsStep').hidden = choosing;
+  $('typeStep').classList.toggle('active', choosing); $('detailsStep').classList.toggle('active', !choosing);
+  $('modalTitle').textContent = choosing ? 'Sự kiện thuộc loại nào?' : (editingId ? 'Chỉnh sửa kế hoạch' : 'Tạo kế hoạch');
+  $('wizardBack').hidden = choosing;
+  $('selectedTypeName').textContent = typeNames[$('planType').value] || typeNames.countdown;
+}
 function openModal(plan = null) {
   editingId = plan?.id || null; chosenImage = plan?.image || ''; crop = { x: 50, y: 50, zoom: 1, ...(plan?.crop || {}) }; $('planForm').reset();
-  $('modalTitle').textContent = plan ? 'Chỉnh sửa kế hoạch' : 'Tạo kế hoạch'; $('savePlan').textContent = plan ? 'Cập nhật kế hoạch' : 'Lưu kế hoạch';
+  $('savePlan').textContent = plan ? 'LƯU' : 'TẠO';
   const today = new Date();
   $('planName').value = plan?.name || ''; $('planDate').value = plan?.date || `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`; $('planTime').value = plan?.time || '';
   $('planType').value = plan?.type || 'countdown'; document.querySelectorAll('.type-option').forEach(button => button.classList.toggle('selected', button.dataset.type === $('planType').value));
   $('imagePreview').src = chosenImage; $('imagePreview').style.display = chosenImage ? 'block' : 'none'; $('uploadLabel').innerHTML = chosenImage ? '<b>Ảnh bìa đã chọn</b><small>Nhấn để thay ảnh</small>' : '<b>Chọn một tấm ảnh</b><small>JPG, PNG hoặc WEBP · tối đa 8 MB</small>';
-  updateCropEditor(); $('modalBackdrop').classList.add('open'); $('modalBackdrop').setAttribute('aria-hidden', 'false'); setTimeout(() => $('planName').focus(), 50);
+  updateCropEditor(); showWizardStep(plan ? 'details' : 'type'); $('modalBackdrop').classList.add('open'); $('modalBackdrop').setAttribute('aria-hidden', 'false');
+  if (plan) setTimeout(() => $('planName').focus(), 50);
 }
 function closeModal() { $('modalBackdrop').classList.remove('open'); $('modalBackdrop').setAttribute('aria-hidden', 'true'); editingId = null; }
 function toggleMenu(menuId) {
@@ -129,7 +138,10 @@ document.addEventListener('click', event => {
 $('closeModal').addEventListener('click', closeModal); $('cancelModal').addEventListener('click', closeModal);
 $('modalBackdrop').addEventListener('click', event => { if (event.target === $('modalBackdrop')) closeModal(); });
 document.addEventListener('keydown', event => { if (event.key === 'Escape') { closeModal(); closeDetails(); document.querySelectorAll('.toolbar-menu').forEach(menu => menu.hidden = true); } });
-document.querySelectorAll('.type-option').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.type-option').forEach(item => item.classList.remove('selected')); button.classList.add('selected'); $('planType').value = button.dataset.type; }));
+document.querySelectorAll('.type-option').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.type-option').forEach(item => item.classList.remove('selected')); button.classList.add('selected'); $('planType').value = button.dataset.type; $('selectedTypeName').textContent = typeNames[button.dataset.type]; }));
+$('stepContinue').addEventListener('click', () => showWizardStep('details'));
+$('typeSummary').addEventListener('click', () => showWizardStep('type'));
+$('wizardBack').addEventListener('click', () => showWizardStep('type'));
 $('detailClose').addEventListener('click', closeDetails);
 $('detailMore').addEventListener('click', event => { event.stopPropagation(); $('detailMenu').hidden = !$('detailMenu').hidden; });
 $('detailEdit').addEventListener('click', () => { const plan = plans.find(item => item.id === activePlanId); if (plan) { closeDetails(); openModal(plan); } });
