@@ -3,55 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#f7f7f5" />
+  <meta name="theme-color" content="#101014" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="Ngày Mai" />
+  <meta name="apple-mobile-web-app-title" content="Daily Day" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="manifest" href="manifest.webmanifest" />
-  <title>Ngày Mai — Đếm ngày cho điều bạn mong chờ</title>
+  <title>Daily Day</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
-      <a class="brand" href="#" aria-label="Ngày Mai, trang chủ"><span class="brand-mark">n.</span><span>ngày mai<span class="brand-dot">.</span></span></a>
-      <nav class="top-nav"><a class="active" href="#plans">Kế hoạch</a><a href="#about">Về ứng dụng</a></nav>
-      <button class="avatar" aria-label="Tài khoản">A</button>
+      <h1>DAILY DAY</h1>
+      <div class="toolbar">
+        <div class="toolbar-item">
+          <button class="tool-button" id="viewToggle" aria-label="Chuyển kiểu hiển thị" title="Chuyển kiểu hiển thị"></button>
+        </div>
+        <div class="toolbar-item">
+          <button class="tool-button" id="sortButton" aria-label="Sắp xếp" title="Sắp xếp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v17m0 0-4-4m4 4 4-4M17 21V4m0 0-4 4m4-4 4 4"/></svg></button>
+          <div class="toolbar-menu sort-menu" id="sortMenu" hidden>
+            <button data-sort="soon">Ngày gần nhất</button>
+            <button data-sort="far">Ngày xa nhất</button>
+            <button data-sort="name">Tên A–Z</button>
+          </div>
+        </div>
+        <div class="toolbar-item">
+          <button class="tool-button more-button" id="moreButton" aria-label="Thêm" title="Thêm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+          <div class="toolbar-menu create-menu" id="createMenu" hidden><button id="createFromMenu"><span class="menu-icon">＋</span><span>Tạo kế hoạch</span></button><button id="themeToggle"><span class="theme-menu-icon">◐</span><span id="themeLabel">Chuyển sang giao diện sáng</span></button></div>
+        </div>
+      </div>
     </header>
 
     <main>
-      <section class="hero" id="about">
-        <div class="hero-copy">
-          <span class="eyebrow"><span class="sparkle">✳</span> MỘT ĐIỀU ĐÁNG MONG CHỜ</span>
-          <h1>Mỗi ngày trôi qua,<br><em>gần hơn một chút.</em></h1>
-          <p>Gom những ngày đặc biệt vào một nơi. Từ chuyến đi sắp tới đến cột mốc bạn luôn chờ đợi.</p>
-          <button class="primary-button" id="newPlan"><span>＋</span> Tạo kế hoạch đầu tiên</button>
-        </div>
-        <div class="hero-art">
-          <button class="slide-arrow slide-prev" id="slidePrev" aria-label="Kế hoạch trước">‹</button>
-          <div class="hero-card" id="heroSlide"><div class="hero-card-top"><span id="slideDate"></span><span>✳</span></div><div class="hero-big" id="slideCount"></div><div class="hero-title" id="slideTitle"></div><div class="hero-card-bottom"><span id="slideType"></span><span>♡</span></div></div>
-          <button class="slide-arrow slide-next" id="slideNext" aria-label="Kế hoạch tiếp theo">›</button>
-          <div class="slide-dots" id="slideDots" aria-label="Chọn kế hoạch"></div>
-        </div>
-      </section>
-
-      <section class="plans-section" id="plans">
-        <div class="section-heading"><div><span class="eyebrow">LỊCH CỦA BẠN</span><h2>Đang đếm đến <span id="planCount">0</span> điều</h2></div><button class="text-button" id="newPlanSecondary">＋ Thêm kế hoạch</button></div>
-        <div class="filter-row"><div class="filters" role="group" aria-label="Lọc kế hoạch"><button class="filter active" data-filter="all">Tất cả <span id="countAll">0</span></button><button class="filter" data-filter="upcoming">Sắp tới</button><button class="filter" data-filter="past">Đã qua</button></div><span class="today-label"><span></span> <b id="todayText"></b></span></div>
-        <div class="plan-grid" id="planGrid"></div>
-        <div class="empty-state" id="emptyState"><div class="empty-icon">✳</div><h3>Chưa có ngày nào được đánh dấu</h3><p>Tạo kế hoạch đầu tiên và bắt đầu đếm ngược đến điều bạn mong chờ.</p><button class="primary-button" id="emptyCreate">＋ Tạo một kế hoạch</button></div>
+      <section class="plan-grid" id="planGrid" data-layout="cards" aria-label="Các kế hoạch"></section>
+      <section class="empty-state" id="emptyState">
+        <div class="empty-icon">＋</div><h2>Chưa có kế hoạch</h2><p>Thêm một ngày bạn muốn ghi nhớ.</p>
+        <button class="empty-create" id="emptyCreate">Tạo kế hoạch</button>
       </section>
     </main>
-    <footer><a class="brand footer-brand" href="#"><span class="brand-mark">n.</span><span>ngày mai<span class="brand-dot">.</span></span></a><span>Thời gian trôi qua, khoảnh khắc ở lại.</span><span>Được làm bằng <span class="heart">♥</span> cho những ngày đáng nhớ</span></footer>
   </div>
+
+  <section class="detail-screen" id="planDetail" aria-hidden="true">
+    <div class="detail-cover" id="detailCover">
+      <img id="detailPhoto" alt="" />
+      <button class="detail-close" id="detailClose" aria-label="Đóng">×</button>
+      <button class="detail-more" id="detailMore" aria-label="Tùy chọn kế hoạch">⋮</button>
+      <div class="detail-menu" id="detailMenu" hidden><button id="detailEdit">Chỉnh sửa</button><button id="detailDelete">Xóa kế hoạch</button></div>
+      <h1 id="detailTitle"></h1>
+    </div>
+    <div class="detail-panel">
+      <div class="detail-topline"><strong id="detailType">D-day</strong><span class="detail-date"><span>▦</span><span id="detailDate"></span></span></div>
+      <div class="detail-summary"><div><h2 id="detailCount"></h2><p id="detailRelative"></p><small id="detailFullDate"></small></div><span class="detail-type-tag" id="detailTypeTag"></span></div>
+    </div>
+  </section>
 
   <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
     <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modal-header"><div><span class="eyebrow">THÊM MỘT DẤU MỐC</span><h2 id="modalTitle">Tạo kế hoạch</h2></div><button class="close-button" id="closeModal" aria-label="Đóng">×</button></div>
+      <div class="modal-header"><div><span class="eyebrow">DAILY DAY</span><h2 id="modalTitle">Tạo kế hoạch</h2></div><button class="close-button" id="closeModal" aria-label="Đóng">×</button></div>
       <form id="planForm">
         <label class="field-label" for="planName">Tên kế hoạch</label><input id="planName" class="text-input" maxlength="70" placeholder="Ví dụ: Chuyến đi Đà Lạt" required />
         <label class="field-label">Kiểu đếm</label><div class="type-grid" id="typeGrid">
@@ -62,14 +74,10 @@
           <button type="button" class="type-option" data-type="monthday"><span class="type-icon">◷</span><span><b>Tháng và ngày</b><small>Còn bao lâu đến ngày</small></span></button>
           <button type="button" class="type-option" data-type="ymd"><span class="type-icon">▦</span><span><b>Năm/tháng/ngày</b><small>Hiện đủ năm, tháng, ngày</small></span></button>
         </div><input type="hidden" id="planType" value="countdown" />
-        <div class="date-row"><div class="date-field"><label class="field-label" for="planDate">Ngày bắt đầu / sự kiện</label><input id="planDate" class="text-input" type="date" required /></div><div class="date-field" id="timeField"><label class="field-label" for="planTime">Giờ (không bắt buộc)</label><input id="planTime" class="text-input" type="time" /></div></div>
+        <div class="date-row"><div class="date-field"><label class="field-label" for="planDate">Ngày bắt đầu / sự kiện</label><input id="planDate" class="text-input" type="date" required /></div><div class="date-field"><label class="field-label" for="planTime">Giờ (không bắt buộc)</label><input id="planTime" class="text-input" type="time" /></div></div>
         <label class="field-label" for="planImage">Ảnh bìa <span class="optional">· không bắt buộc</span></label><label class="upload-box" for="planImage"><span class="upload-icon">↥</span><span id="uploadLabel"><b>Chọn một tấm ảnh</b><small>JPG, PNG hoặc WEBP · tối đa 8 MB</small></span><img id="imagePreview" alt="Ảnh xem trước" /></label><input id="planImage" type="file" accept="image/*" class="visually-hidden" />
-        <div class="crop-editor" id="cropEditor" hidden>
-          <div class="crop-heading"><b>Căn chỉnh ảnh bìa</b><span>Kéo ảnh để chọn phần muốn hiển thị</span></div>
-          <div class="crop-frame" id="cropFrame"><img id="cropImage" alt="Kéo ảnh để căn chỉnh khung cắt" draggable="false" /></div>
-          <label class="zoom-control" for="cropZoom"><span>Thu nhỏ</span><input id="cropZoom" type="range" min="100" max="220" value="100" /><span>Phóng to</span></label>
-        </div>
-        <div class="form-actions"><button class="cancel-button" type="button" id="cancelModal">Hủy</button><button class="primary-button" type="submit" id="savePlan">Lưu kế hoạch <span>↗</span></button></div>
+        <div class="crop-editor" id="cropEditor" hidden><div class="crop-heading"><b>Căn chỉnh ảnh bìa</b><span>Kéo ảnh để chọn vùng hiển thị</span></div><div class="crop-frame" id="cropFrame"><img id="cropImage" alt="Kéo ảnh để căn chỉnh khung cắt" draggable="false" /></div><label class="zoom-control" for="cropZoom"><span>Thu nhỏ</span><input id="cropZoom" type="range" min="100" max="220" value="100" /><span>Phóng to</span></label></div>
+        <div class="form-actions"><button class="cancel-button" type="button" id="cancelModal">Hủy</button><button class="primary-button" type="submit" id="savePlan">Lưu kế hoạch</button></div>
       </form>
     </section>
   </div>
