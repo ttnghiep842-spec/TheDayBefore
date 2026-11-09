@@ -25,14 +25,14 @@
 .detail-summary h2{margin:0 0 4px;font-size:20px;font-weight:500}.detail-summary p{margin:0;color:#d6d6da;font-size:15px}.detail-summary small{display:block;margin-top:3px;color:#92929b;font-size:13px}.detail-type-tag{padding-top:3px;color:#c7c7cc;font-size:clamp(18px,4vw,25px)}
 @media(max-width:700px){.detail-cover{height:36vh;min-height:250px}.detail-cover h1{left:28px;right:28px;bottom:35px}.detail-close{left:20px}.detail-more{right:20px}.detail-menu{right:20px}.detail-panel{inset:30vh 0 0;padding:47px 28px max(25px,env(safe-area-inset-bottom));border-radius:28px 28px 0 0}.detail-topline{padding-bottom:24px}.detail-summary{margin-top:34px}}
 /* Center the card content like the supplied reference. */
-.plan-grid[data-layout=cards] .card-content{inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 26px;text-align:center}
-.plan-grid[data-layout=cards] .card-count{max-width:100%;margin:0 0 7px;font-size:clamp(28px,4vw,46px);line-height:1.12;letter-spacing:-.7px}
+.plan-grid[data-layout=cards] .card-content{inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:25px 26px 35px;text-align:center}
+.plan-grid[data-layout=cards] .card-count{max-width:100%;margin:0 0 7px;font-size:clamp(20px,2.8vw,32px);font-weight:200;line-height:1.12;letter-spacing:-.7px}
 .plan-grid[data-layout=cards] .card-title{max-width:100%;margin:0;font-size:clamp(15px,2.2vw,20px);font-weight:400;white-space:normal}
-.plan-grid[data-layout=cards] .card-meta{position:absolute;right:10px;bottom:17px;left:10px;display:flex;flex-direction:column;gap:4px;padding:0;border:0;text-align:center;font-size:12px}
-.plan-grid[data-layout=cards] .card-kind{font-size:9px;opacity:.8}
+.plan-grid[data-layout=cards] .card-meta{position:absolute;right:10px;bottom:17px;left:10px;display:flex;flex-direction:column;gap:4px;padding:0;border:0;text-align:center;font-size:10px}
+.plan-grid[data-layout=cards] .card-kind{display:none}
 .plan-grid[data-layout=cards] .plan-card:after{background:linear-gradient(180deg,rgba(10,10,12,.18),rgba(10,10,12,.3) 50%,rgba(10,10,12,.48))}
 .plan-grid[data-layout=circle] .card-content{inset:auto;display:block;padding:0;text-align:center}
-@media(max-width:700px){.plan-grid[data-layout=cards] .card-count{font-size:clamp(26px,8vw,38px)}.plan-grid[data-layout=cards] .card-meta{bottom:14px}}
+@media(max-width:700px){.plan-grid[data-layout=cards] .plan-card{aspect-ratio:2.2/1}.plan-grid[data-layout=cards] .card-count{font-size:clamp(20px,6vw,30px)}.plan-grid[data-layout=cards] .card-meta{bottom:6px}}
 /* Light theme, selectable from the overflow menu. */
 body[data-theme=light]{--bg:#f3f3ef;--panel:#fff;--panel-2:#e8e8e2;--ink:#242722;--muted:#72766f;--line:#dcdcd5;--accent:#68785c;background:var(--bg);color:var(--ink)}
 body[data-theme=light] .tool-button{color:#44464a}
@@ -127,7 +127,7 @@ body[data-theme=light] .toast{border-color:#deded8;background:#fff;color:#242722
 @media(max-width:700px){.plan-grid[data-layout=list] .plan-card,.plan-grid[data-layout=simple] .plan-card{min-height:96px;padding:14px 0}.plan-grid[data-layout=list] .card-title,.plan-grid[data-layout=simple] .card-title{font-size:18px}.plan-grid[data-layout=list] .card-count,.plan-grid[data-layout=simple] .card-count{font-size:19px}}
 /* Slightly shorter, softer card corners to match demo4. */
 .plan-grid[data-layout=cards] .plan-card{border-radius:14px}
-@media(max-width:700px){.plan-grid[data-layout=cards] .plan-card{aspect-ratio:2.05/1;border-radius:14px}}
+@media(max-width:700px){.plan-grid[data-layout=cards] .plan-card{aspect-ratio:2.5/1;border-radius:14px}}
 .detail-input-row>.text-input:focus{box-shadow:none}
 .detail-input-row>.text-input::placeholder{color:#aaaab1;text-align:left}
 .detail-input-row .title-mark{flex:0 0 auto;color:#eee;font-size:24px}
