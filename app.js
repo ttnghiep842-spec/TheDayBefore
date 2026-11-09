@@ -58,10 +58,15 @@ function shortCount(plan, counter) {
 function escapeHtml(value) { return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char])); }
 function setLayout(mode) {
   layoutMode = mode; localStorage.setItem('daily-day-layout', mode); $('planGrid').dataset.layout = mode;
-  $('viewToggle').innerHTML = mode === 'cards'
-    ? '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="5" r="1.6"/><circle cx="12" cy="5" r="1.6"/><circle cx="19" cy="5" r="1.6"/><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/><circle cx="5" cy="19" r="1.6"/><circle cx="12" cy="19" r="1.6"/><circle cx="19" cy="19" r="1.6"/></svg>'
-    : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16"/></svg>';
-  $('viewToggle').title = mode === 'cards' ? 'Hiển thị ảnh tròn' : 'Hiển thị thẻ ảnh';
+  const icons = {
+    cards: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>',
+    circle: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="5" r="1.6"/><circle cx="12" cy="5" r="1.6"/><circle cx="19" cy="5" r="1.6"/><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/><circle cx="5" cy="19" r="1.6"/><circle cx="12" cy="19" r="1.6"/><circle cx="19" cy="19" r="1.6"/></svg>',
+    list: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="6" r="2.5"/><path d="M11 6h10M11 12h10M11 18h10"/><circle cx="5" cy="12" r="2.5"/><circle cx="5" cy="18" r="2.5"/></svg>',
+    simple: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16"/></svg>'
+  };
+  const names = { cards: 'thẻ ảnh', circle: 'ảnh tròn', list: 'danh sách có ảnh', simple: 'danh sách tối giản' };
+  $('viewToggle').innerHTML = icons[mode] || icons.cards;
+  $('viewToggle').title = `Kiểu hiện tại: ${names[mode] || names.cards}. Nhấn để đổi kiểu`;
 }
 function setTheme(mode) {
   themeMode = mode; document.body.dataset.theme = mode; document.documentElement.style.colorScheme = mode;
@@ -119,13 +124,17 @@ function openModal(plan = null) {
   $('planType').value = plan?.type || 'countdown'; document.querySelectorAll('.type-option').forEach(button => button.classList.toggle('selected', button.dataset.type === $('planType').value));
   $('imagePreview').src = chosenImage; $('imagePreview').style.display = chosenImage ? 'block' : 'none'; $('uploadLabel').innerHTML = chosenImage ? '<b>Ảnh bìa đã chọn</b><small>Nhấn để thay ảnh</small>' : '<b>Chọn một tấm ảnh</b><small>JPG, PNG hoặc WEBP · tối đa 8 MB</small>';
   updateCropEditor(); showWizardStep(plan ? 'details' : 'type'); $('modalBackdrop').classList.add('open'); $('modalBackdrop').setAttribute('aria-hidden', 'false');
-  if (plan) setTimeout(() => $('planName').focus(), 50);
+  if (plan) setTimeout(() => {
+    const titleInput = $('planName'), caret = titleInput.value.length;
+    titleInput.focus({ preventScroll: true });
+    try { titleInput.setSelectionRange(caret, caret); } catch {}
+  }, 80);
 }
 function closeModal() { $('modalBackdrop').classList.remove('open'); $('modalBackdrop').setAttribute('aria-hidden', 'true'); editingId = null; }
 function toggleMenu(menuId) {
   const menu = $(menuId), willOpen = menu.hidden; document.querySelectorAll('.toolbar-menu').forEach(item => item.hidden = true); menu.hidden = !willOpen;
 }
-$('viewToggle').addEventListener('click', () => { setLayout(layoutMode === 'cards' ? 'circle' : 'cards'); render(); });
+$('viewToggle').addEventListener('click', () => { const modes = ['cards', 'circle', 'list', 'simple']; setLayout(modes[(modes.indexOf(layoutMode) + 1) % modes.length]); render(); });
 $('sortButton').addEventListener('click', event => { event.stopPropagation(); toggleMenu('sortMenu'); });
 $('moreButton').addEventListener('click', event => { event.stopPropagation(); toggleMenu('createMenu'); });
 $('themeToggle').addEventListener('click', () => { setTheme(themeMode === 'dark' ? 'light' : 'dark'); $('createMenu').hidden = true; });

@@ -110,6 +110,21 @@ body[data-theme=light] .toast{border-color:#deded8;background:#fff;color:#242722
 .detail-input-row>label,.detail-input-row>span:first-child{flex:0 0 42%;color:#dedee2;font-size:16px}
 .detail-input-row>.text-input{flex:1;min-width:0;height:48px;padding:0;border:0;background:transparent;color:#f4f4f5;text-align:right;font-size:16px}
 .detail-input-row>#planName{direction:ltr;text-align:left}
+/* Two compact list layouts inspired by the supplied mobile references. */
+.plan-grid[data-layout=list],.plan-grid[data-layout=simple]{display:flex;flex-direction:column;gap:0}
+.plan-grid[data-layout=list] .plan-card,.plan-grid[data-layout=simple] .plan-card{display:flex;align-items:center;gap:16px;width:100%;min-height:96px;aspect-ratio:auto;overflow:visible;padding:14px 10px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;color:var(--ink)}
+.plan-grid[data-layout=list] .plan-photo-frame{position:relative;z-index:1;inset:auto;flex:0 0 64px;width:64px;height:64px;overflow:hidden;border:0;border-radius:50%;background:linear-gradient(145deg,#536b58,#29352c)}
+.plan-grid[data-layout=list] .plan-photo{inset:0;width:100%;height:100%;border-radius:50%;object-fit:cover}
+.plan-grid[data-layout=list] .card-content,.plan-grid[data-layout=simple] .card-content{position:static;display:grid;flex:1;min-width:0;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:center;gap:3px 12px;padding:0;text-align:left}
+.plan-grid[data-layout=list] .card-title,.plan-grid[data-layout=simple] .card-title{grid-column:1;grid-row:1;margin:0;overflow:hidden;color:var(--ink);font-size:19px;font-weight:400;text-overflow:ellipsis;white-space:nowrap;text-shadow:none}
+.plan-grid[data-layout=list] .card-meta,.plan-grid[data-layout=simple] .card-meta{grid-column:1;grid-row:2;justify-content:flex-start;padding:0;border:0;color:var(--muted);font-size:15px}
+.plan-grid[data-layout=list] .card-kind,.plan-grid[data-layout=simple] .card-kind{display:none}
+.plan-grid[data-layout=list] .card-count,.plan-grid[data-layout=simple] .card-count{grid-column:2;grid-row:1 / span 2;margin:0;color:var(--ink);font-size:22px;font-weight:600;letter-spacing:0;text-shadow:none;white-space:nowrap}
+.plan-grid[data-layout=list] .card-index,.plan-grid[data-layout=simple] .card-index,.plan-grid[data-layout=list] .plan-card:after,.plan-grid[data-layout=simple] .plan-card:after{display:none}
+.plan-grid[data-layout=list] .card-menu,.plan-grid[data-layout=simple] .card-menu{top:50%;right:0;transform:translateY(-50%);background:transparent;color:var(--muted)}
+.plan-grid[data-layout=list] .card-content,.plan-grid[data-layout=simple] .card-content{padding-right:40px}
+.plan-grid[data-layout=simple] .plan-photo-frame{display:none}
+@media(max-width:700px){.plan-grid[data-layout=list] .plan-card,.plan-grid[data-layout=simple] .plan-card{min-height:96px;padding:14px 0}.plan-grid[data-layout=list] .card-title,.plan-grid[data-layout=simple] .card-title{font-size:18px}.plan-grid[data-layout=list] .card-count,.plan-grid[data-layout=simple] .card-count{font-size:21px}}
 .detail-input-row>.text-input:focus{box-shadow:none}
 .detail-input-row>.text-input::placeholder{color:#aaaab1;text-align:left}
 .detail-input-row .title-mark{flex:0 0 auto;color:#eee;font-size:24px}
