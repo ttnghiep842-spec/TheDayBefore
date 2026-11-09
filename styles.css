@@ -109,6 +109,7 @@ body[data-theme=light] .toast{border-color:#deded8;background:#fff;color:#242722
 .detail-input-row{display:flex;width:100%;min-height:72px;align-items:center;justify-content:space-between;gap:18px;padding:12px 0;border:0;border-bottom:1px solid #303036;background:transparent;color:#f1f1f3;font:400 16px var(--sans);text-align:left}
 .detail-input-row>label,.detail-input-row>span:first-child{flex:0 0 42%;color:#dedee2;font-size:16px}
 .detail-input-row>.text-input{flex:1;min-width:0;height:48px;padding:0;border:0;background:transparent;color:#f4f4f5;text-align:right;font-size:16px}
+.detail-input-row>#planName{direction:ltr;text-align:left}
 .detail-input-row>.text-input:focus{box-shadow:none}
 .detail-input-row>.text-input::placeholder{color:#aaaab1;text-align:left}
 .detail-input-row .title-mark{flex:0 0 auto;color:#eee;font-size:24px}
