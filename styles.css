@@ -122,9 +122,9 @@ body[data-theme=light] .toast{border-color:#deded8;background:#fff;color:#242722
 .plan-grid[data-layout=list] .card-count,.plan-grid[data-layout=simple] .card-count{grid-column:2;grid-row:1 / span 2;margin:0;color:var(--ink);font-size:22px;font-weight:600;letter-spacing:0;text-shadow:none;white-space:nowrap}
 .plan-grid[data-layout=list] .card-index,.plan-grid[data-layout=simple] .card-index,.plan-grid[data-layout=list] .plan-card:after,.plan-grid[data-layout=simple] .plan-card:after{display:none}
 .plan-grid[data-layout=list] .card-menu,.plan-grid[data-layout=simple] .card-menu{top:50%;right:0;transform:translateY(-50%);background:transparent;color:var(--muted)}
-.plan-grid[data-layout=list] .card-content,.plan-grid[data-layout=simple] .card-content{padding-right:40px}
+.plan-grid[data-layout=list] .card-content,.plan-grid[data-layout=simple] .card-content{padding-right:0}
 .plan-grid[data-layout=simple] .plan-photo-frame{display:none}
-@media(max-width:700px){.plan-grid[data-layout=list] .plan-card,.plan-grid[data-layout=simple] .plan-card{min-height:96px;padding:14px 0}.plan-grid[data-layout=list] .card-title,.plan-grid[data-layout=simple] .card-title{font-size:18px}.plan-grid[data-layout=list] .card-count,.plan-grid[data-layout=simple] .card-count{font-size:21px}}
+@media(max-width:700px){.plan-grid[data-layout=list] .plan-card,.plan-grid[data-layout=simple] .plan-card{min-height:96px;padding:14px 0}.plan-grid[data-layout=list] .card-title,.plan-grid[data-layout=simple] .card-title{font-size:18px}.plan-grid[data-layout=list] .card-count,.plan-grid[data-layout=simple] .card-count{font-size:19px}}
 /* Slightly shorter, softer card corners to match demo4. */
 .plan-grid[data-layout=cards] .plan-card{border-radius:14px}
 @media(max-width:700px){.plan-grid[data-layout=cards] .plan-card{aspect-ratio:2.05/1;border-radius:14px}}
